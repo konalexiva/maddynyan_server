@@ -24,7 +24,7 @@ SECRET_KEY = 'a#*#49u9mjc60olv6$aamqxu6o#b)e@-hbi_uodl@+_%)41o54'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '37.140.192.94']
+ALLOWED_HOSTS = ['maddynyan.ru', 'www.maddynyan.ru']
 
 # Application definition
 
