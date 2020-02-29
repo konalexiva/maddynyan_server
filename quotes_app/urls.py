@@ -5,7 +5,8 @@ from maddynyan_server import settings
 from quotes_app import views
 
 urlpatterns = [
-                  # path('instagram', views.),
+                  path('', views.Quotes.as_view()),
+                  path('/rand', views.RandQuote.as_view())
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
               static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

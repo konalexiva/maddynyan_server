@@ -5,9 +5,9 @@ from maddynyan_server import settings
 from django.contrib import admin
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
+                  path('django/admin/', admin.site.urls),
                   path('', include('redirects_app.urls')),
-                  # path('/api', include('quotes_app.urls')),
+                  path('api/quotes', include('quotes_app.urls')),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
               static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

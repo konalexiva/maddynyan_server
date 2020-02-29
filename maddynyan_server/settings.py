@@ -24,7 +24,8 @@ SECRET_KEY = 'a#*#49u9mjc60olv6$aamqxu6o#b)e@-hbi_uodl@+_%)41o54'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['maddynyan.ru', 'www.maddynyan.ru']
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['maddynyan.ru', 'www.maddynyan.ru']
 
 # Application definition
 
@@ -124,9 +125,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'files', 'static')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'files', 'media')
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+STATIC_ROOT = 'static'
+MEDIA_ROOT = 'media'
