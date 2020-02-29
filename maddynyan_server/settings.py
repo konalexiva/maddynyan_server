@@ -23,9 +23,10 @@ SECRET_KEY = 'a#*#49u9mjc60olv6$aamqxu6o#b)e@-hbi_uodl@+_%)41o54'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-# ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+#ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['maddynyan.ru', 'www.maddynyan.ru']
+
 
 # Application definition
 
@@ -40,7 +41,6 @@ INSTALLED_APPS = [
     'quotes_app',
     'redirects_app',
     'media',
-    'static'
 ]
 
 MIDDLEWARE = [
@@ -123,7 +123,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
 
-STATIC_ROOT = 'static'
-MEDIA_ROOT = 'media'
+STATIC_ROOT = os.path.join(BASE_DIR, 'files', 'static')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)

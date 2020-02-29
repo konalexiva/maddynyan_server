@@ -11,7 +11,7 @@ urlpatterns = [
                   # path('api/statistics/twitch', views.TwitchStatistics.as_view()),
                   # path('api/statistics/instagram', views.InstaStatistics.as_view()),
                   path('api/statistics', views.Statistics.as_view()),
-                  re_path(r'^', views.rat_mania)
+                  path('statistics', views.index),
+                  re_path(r'^', views.rat_mania),
 
-              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + \
-              static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

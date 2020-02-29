@@ -83,3 +83,7 @@ class Statistics(APIView):
 
         return JsonResponse(data={'insta': insta_serializer.data, 'twitch': twitch_serializer.data},
                             status=200)
+
+
+def index(request):
+    return render(request, 'redirects_app/index.html')
