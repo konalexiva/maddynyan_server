@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+from datetime import timedelta
+
+from celery.schedules import crontab
 
 import os
 
@@ -20,15 +23,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'a#*#49u9mjc60olv6$aamqxu6o#b)e@-hbi_uodl@+_%)41o54'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-CORS_ORIGIN_ALLOW_ALL = True
-#ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['maddynyan.ru', 'www.maddynyan.ru']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,6 +36,22 @@ INSTALLED_APPS = [
     'redirects_app',
     'media',
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(os.getenv('REDIS_HOST', '127.0.0.1'), 6379)],
+        },
+    },
+}
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER', 'redis://127.0.0.1:6379/0')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_BROKER', 'redis://127.0.0.1:6379/0')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+WORKER_MAX_MEMORY_PER_CHILD = 200000
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,21 +82,8 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'maddynyan_server.wsgi.application'
 WSGI_APPLICATION = 'maddynyan_server.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u0963683_maddynyan-server',
-        'USER': 'u0963683_konalex',
-        'PASSWORD': 'gopaslona1',
-        'HOST': '37.140.192.94',
-        'PORT': '3306',
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -106,6 +103,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=3650),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=3650),
+    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -123,9 +135,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'files', 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'files', 'media')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+AUTH_USER_MODEL = 'users.UserProfileModel'
+
+AVATAR_SIZE = 500, 500
+
+AVATAR_FILE_TYPES = [
+    'image/jpeg',
+    'image/pjpeg',
+    'image/png',
+    'image/bmp',
+    'image/x-windows-bmp'
+]
+
+DOCUMENT_FILE_TYPES = [
+    'image/jpeg',
+    'image/pjpeg',
+    'image/png',
+    'image/bmp',
+    'image/x-windows-bmp',
+    'application/pdf'
+]
+
+from .environment.settings import *

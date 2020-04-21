@@ -1,0 +1,95 @@
+version: '3.5'
+
+networks:
+  maddynyan_network:
+
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    networks:
+      - maddynyan_server
+  db:
+    image: postgres:12.2
+    restart: always
+    networks:
+      - maddynyan_server
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+  daphne:
+    image: https://github.com/konalexiva/maddynyan_server
+    restart: always
+    command: bash -c "python3 manage.py migrate && python3 manage.py seed all && python3 manage.py collectstatic --noinput && daphne -b 0.0.0.0 -p ${DAPHNE_PORT} maddynyan_server.asgi:application"
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+      CELERY_BROKER: redis://redis:6379/0
+      MACHINE_HOST: 127.0.0.1
+      HOST_IP: ${HOST_IP}
+      HOST_PORT: ${DAPHNE_PORT}
+      NGINX_PORT: ${NGINX_PORT}
+      HOST_DOMAIN: ${HOST_DOMAIN}
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      SUPERUSER_PASS: ${SUPERUSER_PASS}
+      ENVIRONMENT: ${ENVIRONMENT}
+    ports:
+      - "127.0.0.1:${DAPHNE_PORT}:${DAPHNE_PORT}"
+    networks:
+      - maddynyan_server
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./files:/code/files
+  celery:
+    image: https://github.com/konalexiva/maddynyan_server
+    command: celery -A maddynyan_server worker -l info
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+      CELERY_BROKER: redis://redis:6379/0
+      MACHINE_HOST: 127.0.0.1
+      HOST_IP: ${HOST_IP}
+      HOST_DOMAIN: ${HOST_DOMAIN}
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      SUPERUSER_PASS: ${SUPERUSER_PASS}
+      ENVIRONMENT: ${ENVIRONMENT}
+    depends_on:
+      - db
+      - redis
+    networks:
+      - maddynyan_server
+    volumes:
+      - ./files:/code/files
+  celery-beat:
+    image: https://github.com/konalexiva/maddynyan_server
+    command: celery -A maddynyan_server beat -l info --pidfile=
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+      CELERY_BROKER: redis://redis:6379/0
+      MACHINE_HOST: 127.0.0.1
+      HOST_IP: ${HOST_IP}
+      HOST_DOMAIN: ${HOST_DOMAIN}
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      SUPERUSER_PASS: ${SUPERUSER_PASS}
+      ENVIRONMENT: ${ENVIRONMENT}
+    depends_on:
+      - db
+      - redis
+    networks:
+      - maddynyan_server
+    volumes:
+      - ./files:/code/files

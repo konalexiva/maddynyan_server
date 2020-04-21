@@ -1,43 +1,3 @@
-# Numerous always-ignore extensions
-*.bak
-*.diff
-*.err
-*.exe
-*.log
-*.orig
-*.rej
-*.sass-cache
-*.swo
-*.swp
-*.vi
-*~
-
-# OS or Editor folders
-*.sublime-grunt.cache
-*.sublime-project
-*.sublime-workspace
-._*
-.cache
-.DS_Store
-.project
-.settings
-.tmproj
-.config
-Thumbs.db
-
-# Folders to ignore
-.CVS
-.git
-.hg
-.idea
-.svn
-
-
-# Node.JS
-node_modules
-npm-debug.log
-
-package-lock.json
 
 # Created by https://www.gitignore.io/api/django,python,intellij+all
 
@@ -47,7 +7,6 @@ package-lock.json
 *.pot
 *.pyc
 __pycache__/
-local_settings.py
 db.sqlite3
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
@@ -215,7 +174,7 @@ celerybeat-schedule
 # SageMath parsed files
 *.sage.py
 
-# Environments
+# ENVIRONMENT
 .env
 .venv
 env/
