@@ -144,8 +144,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-AUTH_USER_MODEL = 'users.UserProfileModel'
-
 AVATAR_SIZE = 500, 500
 
 AVATAR_FILE_TYPES = [

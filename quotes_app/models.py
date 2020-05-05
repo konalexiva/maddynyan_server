@@ -7,7 +7,7 @@ class QuoteModel(models.Model):
     text = models.TextField(null=False, blank=False)
 
     def __str__(self):
-        return '%d (%s)' % (self.id, self.text)
+        return f'{self.id}\t{self.text}'
 
     class Meta:
         verbose_name = 'Цитата'
