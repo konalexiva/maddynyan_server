@@ -6,7 +6,7 @@ networks:
 services:
   db:
     container_name: maddynyan_postgres_db
-    image: postgres:lastest
+    image: postgres:12
     restart: always
     networks:
       - maddynyan_network
