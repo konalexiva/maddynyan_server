@@ -15,7 +15,7 @@ class Quotes(APIView):
 
     @staticmethod
     def get(request):
-        quotes = QuotesRepository().get_random()
+        quotes = QuotesRepository().get_all()
         return Response(QuoteSerializer(quotes, many=True).data, status=status.HTTP_200_OK)
 
 
@@ -24,5 +24,5 @@ class RandQuote(APIView):
 
     @staticmethod
     def get(request):
-        quote = QuotesRepository().get_all()
-        return Response(QuoteSerializer(quote, many=False).data, status=status.HTTP_200_OK)
+        quotes = QuotesRepository().get_random()
+        return Response(QuoteSerializer(quotes, many=False).data, status=status.HTTP_200_OK)

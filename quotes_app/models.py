@@ -1,9 +1,10 @@
 from django.db import models
 
-
 # Create your models here.
+from backend.models import BaseModel
 
-class QuoteModel(models.Model):
+
+class QuoteModel(BaseModel):
     text = models.TextField(null=False, blank=False)
 
     def __str__(self):
